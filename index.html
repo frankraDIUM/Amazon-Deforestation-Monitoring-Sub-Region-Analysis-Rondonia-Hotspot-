@@ -55,52 +55,79 @@ const hotspots = L.geoJSON(null, {
   }
 });
 
-// ================== LAYER CONTROL (ALWAYS PRESENT) ==================
-const baseLayers = {
-  "2023 False Color": layer2023,
-  "2024 False Color": layer2024
-};
-
-const overlayLayers = {
-  "Deforestation Hotspots": hotspots
-};
-
-const layerControl = L.control.layers(baseLayers, overlayLayers, {
-  collapsed: false
-}).addTo(map);
 
 // ================== LOAD GEOJSON ASYNC ==================
-fetch('https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
+fetch('https://github.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/blob/main/Loss_Hotspots_Leaflet.geojson')
   .then(res => res.json())
   .then(data => L.geoJSON(data).addTo(map));
+    hotspots = L.geoJSON(data, {
+      style: {
+        color: '#ffff00',
+        weight: 1.2,
+        fillColor: '#ffff00',
+        fillOpacity: 0.45
+      },
+      onEachFeature: function(feature, layer) {
+        const areaRaw = feature.properties.area_ha;
+        const areaHa = (!isNaN(areaRaw)) ? Number(areaRaw) : null;
 
-// ================== SWITCH YEAR BUTTON ==================
-let currentYear = 2023;
+        layer.bindPopup(
+          `<b>Deforestation Hotspot</b><br>
+           Area: ${areaHa ? areaHa.toFixed(2) + ' ha' : 'N/A'}<br>
+           Detected 2023–2024`
+        );
+      }
+    });
+    // =======================
+    // LAYER CONTROL
+    // =======================
+    const baseLayers = {
+      "2023 False Color": overlay2023,
+      "2024 False Color": overlay2024
+    };
 
-const switchControl = L.control({position:'topleft'});
-switchControl.onAdd = () => {
-  const div = L.DomUtil.create('div','info');
-  div.innerHTML = `<button onclick="switchYear()">Switch Year</button>`;
+    const overlays = {
+      "Deforestation Hotspots": hotspots
+    };
+
+    L.control.layers(baseLayers, overlays, {
+      position: 'topright',
+      collapsed: false
+    }).addTo(map);
+  })
+  .catch(err => console.error(err));
+
+// =======================
+// SYNC YEAR WHEN RADIO BUTTON CLICKED
+// =======================
+map.on('baselayerchange', function(e) {
+  if (e.name === '2023 False Color') currentYear = '2023';
+  if (e.name === '2024 False Color') currentYear = '2024';
+  console.log('Year changed via control:', currentYear);
+});
+
+// =======================
+// SWITCH YEAR BUTTON
+// =======================
+const toggleControl = L.control({ position: 'topleft' });
+toggleControl.onAdd = function () {
+  const div = L.DomUtil.create('div', 'info');
+  div.innerHTML = '<button onclick="toggleYear()">Switch Year</button>';
   return div;
 };
-switchControl.addTo(map);
+toggleControl.addTo(map);
 
-window.switchYear = () => {
-  if (currentYear === 2023) {
-    map.removeLayer(layer2023);
-    map.addLayer(layer2024);
-    layerControl._layers.forEach(l => {
-      if (l.name === '2024 False Color') l.layer.addTo(map);
-    });
-    currentYear = 2024;
+window.toggleYear = function () {
+  if (currentYear === '2023') {
+    map.removeLayer(overlay2023);
+    map.addLayer(overlay2024);
+    currentYear = '2024';
   } else {
-    map.removeLayer(layer2024);
-    map.addLayer(layer2023);
-    layerControl._layers.forEach(l => {
-      if (l.name === '2023 False Color') l.layer.addTo(map);
-    });
-    currentYear = 2023;
+    map.removeLayer(overlay2024);
+    map.addLayer(overlay2023);
+    currentYear = '2023';
   }
+  console.log('Year toggled:', currentYear);
 };
 
 // =======================
@@ -147,3 +174,4 @@ legend.addTo(map);
 </script>
 </body>
 </html>
+
