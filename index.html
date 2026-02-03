@@ -66,29 +66,31 @@ let hotspots = L.geoJSON(null, {
   }
 });
 
+// Add hotspots to map (can toggle visibility later)
+hotspots.addTo(map);
+
 // ================== LOAD GEOJSON ==================
 fetch('https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
   .then(res => res.json())
   .then(data => {
-    hotspots.addData(data);
-    hotspots.addTo(map);  // add to map initially
+    hotspots.addData(data);  // populate the existing layer
+  })
+  .catch(err => console.error('GeoJSON load failed:', err));
 
-    // ================== LAYER CONTROL ==================
-    const overlays = {
-      "Deforestation Hotspots": hotspots
-    };
+// ================== LAYER CONTROL ==================
+const baseLayers = {
+  "2023 False Color": overlay2023,
+  "2024 False Color": overlay2024
+};
 
-    const baseLayers = {
-      "2023 False Color": overlay2023,
-      "2024 False Color": overlay2024
-    };
+const overlays = {
+  "Deforestation Hotspots": hotspots
+};
 
-    L.control.layers(baseLayers, overlays, {
-      position: 'topright',
-      collapsed: false
-    }).addTo(map);
-  
- });
+L.control.layers(baseLayers, overlays, {
+  position: 'topright',
+  collapsed: false
+}).addTo(map);
 
 // ================== SWITCH YEAR BUTTON ==================
 const toggleControl = L.control({ position: 'topleft' });
@@ -151,7 +153,3 @@ legend.addTo(map);
 </script>
 </body>
 </html>
-
-
-
-
