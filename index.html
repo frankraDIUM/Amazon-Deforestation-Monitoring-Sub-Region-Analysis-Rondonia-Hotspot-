@@ -15,6 +15,7 @@
     padding:8px;
     border-radius:5px;
     box-shadow:0 0 10px rgba(0,0,0,.3);
+    z-index: 1000; /* FIX 1: ensure Switch Year button is visible */
   }
   .legend i {
     display:inline-block;
@@ -44,11 +45,10 @@ const overlay2023 = L.imageOverlay('2023_falsecolor.png', imageBounds, {opacity:
 const overlay2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity:0.85});
 
 overlay2023.addTo(map); // start with 2023
-
 let currentYear = '2023';
 
 // ================== HOTSPOTS LAYER ==================
-let hotspots = L.geoJSON(null, {
+const hotspots = L.geoJSON(null, {
   style: {
     color: '#ffff00',
     weight: 1.2,
@@ -70,25 +70,29 @@ let hotspots = L.geoJSON(null, {
 fetch('https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
   .then(res => res.json())
   .then(data => {
-    hotspots.addData(data);
-    hotspots.addTo(map);  // add to map initially
-
-    // ================== LAYER CONTROL ==================
-    const overlays = {
-      "Deforestation Hotspots": hotspots
-    };
-
-    const baseLayers = {
-      "2023 False Color": overlay2023,
-      "2024 False Color": overlay2024
-    };
-
-    L.control.layers(baseLayers, overlays, {
-      position: 'topright',
-      collapsed: false
-    }).addTo(map);
+    if (!data || !data.features || data.features.length === 0) {
+      console.error('GeoJSON loaded but contains no features (possible Git LFS issue)');
+      return;
+    }
+    console.log('Hotspots loaded:', data.features.length);
+    hotspots.addData(data); // FIX 2: load data safely, do NOT auto-add to map
   })
   .catch(err => console.error('GeoJSON load failed:', err));
+
+// ================== LAYER CONTROL ==================
+const overlays = {
+  "Deforestation Hotspots": hotspots
+};
+
+const baseLayers = {
+  "2023 False Color": overlay2023,
+  "2024 False Color": overlay2024
+};
+
+L.control.layers(baseLayers, overlays, {
+  position: 'topright',
+  collapsed: false
+}).addTo(map);
 
 // ================== SWITCH YEAR BUTTON ==================
 const toggleControl = L.control({ position: 'topleft' });
