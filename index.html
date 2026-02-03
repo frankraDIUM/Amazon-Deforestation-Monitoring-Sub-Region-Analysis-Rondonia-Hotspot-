@@ -16,6 +16,12 @@
     border-radius:5px;
     box-shadow:0 0 10px rgba(0,0,0,.3);
   }
+  .legend i {
+    display:inline-block;
+    width:12px;
+    height:12px;
+    margin-right:4px;
+  }
 </style>
 </head>
 <body>
@@ -26,21 +32,23 @@
 // ================== MAP ==================
 const map = L.map('map').setView([-10.5, -62.5], 8);
 
+// Base layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18
 }).addTo(map);
 
-// ================== IMAGE LAYERS ==================
+// ================== IMAGE OVERLAYS ==================
 const imageBounds = [[-13, -65], [-8, -60]];
 
 const overlay2023 = L.imageOverlay('2023_falsecolor.png', imageBounds, {opacity:0.85});
-const overlay2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity:0.0});
+const overlay2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity:0.85});
 
-overlay2023.addTo(map);
+overlay2023.addTo(map); // start with 2023
+
 let currentYear = '2023';
 
-// ================== HOTSPOTS LAYER (FIXED) ==================
-const hotspots = L.geoJSON(null, {
+// ================== HOTSPOTS LAYER ==================
+let hotspots = L.geoJSON(null, {
   style: {
     color: '#ffff00',
     weight: 1.2,
@@ -48,9 +56,8 @@ const hotspots = L.geoJSON(null, {
     fillOpacity: 0.45
   },
   onEachFeature: function(feature, layer) {
-    const areaRaw = feature.properties?.area_ha;
+    const areaRaw = feature.properties.area_ha;
     const areaHa = (!isNaN(areaRaw)) ? Number(areaRaw) : null;
-
     layer.bindPopup(
       `<b>Deforestation Hotspot</b><br>
        Area: ${areaHa ? areaHa.toFixed(2) + ' ha' : 'N/A'}<br>
@@ -59,35 +66,31 @@ const hotspots = L.geoJSON(null, {
   }
 });
 
-// ================== LOAD GEOJSON (ONLY CHANGE HERE) ==================
+// ================== LOAD GEOJSON ==================
 fetch('https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
   .then(res => res.json())
   .then(data => {
-    hotspots.addData(data);   // ✅ correct
+    hotspots.addData(data);
+    hotspots.addTo(map);  // add to map initially
+
+    // ================== LAYER CONTROL ==================
+    const overlays = {
+      "Deforestation Hotspots": hotspots
+    };
+
+    const baseLayers = {
+      "2023 False Color": overlay2023,
+      "2024 False Color": overlay2024
+    };
+
+    L.control.layers(baseLayers, overlays, {
+      position: 'topright',
+      collapsed: false
+    }).addTo(map);
   })
-  .catch(err => console.error('GeoJSON failed:', err));
+  .catch(err => console.error('GeoJSON load failed:', err));
 
-// ================== LAYER CONTROL (UNCHANGED) ==================
-const baseLayers = {
-  "2023 False Color": overlay2023,
-  "2024 False Color": overlay2024
-};
-
-const overlays = {
-  "Deforestation Hotspots": hotspots
-};
-
-L.control.layers(baseLayers, overlays, {
-  position: 'topright',
-  collapsed: false
-}).addTo(map);
-
-// ================== SYNC YEAR ==================
-map.on('baselayerchange', function(e) {
-  currentYear = e.name.includes('2023') ? '2023' : '2024';
-});
-
-// ================== SWITCH YEAR BUTTON (UNCHANGED) ==================
+// ================== SWITCH YEAR BUTTON ==================
 const toggleControl = L.control({ position: 'topleft' });
 toggleControl.onAdd = function () {
   const div = L.DomUtil.create('div', 'info');
@@ -106,6 +109,7 @@ window.toggleYear = function () {
     map.addLayer(overlay2023);
     currentYear = '2023';
   }
+  console.log('Year toggled:', currentYear);
 };
 
 // ================== INFO PANEL ==================
@@ -125,9 +129,8 @@ infoPanel.onAdd = function () {
 };
 infoPanel.addTo(map);
 
-// ================== LEGEND (UNCHANGED) ==================
+// ================== LEGEND ==================
 const legend = L.control({position: 'bottomright'});
-
 legend.onAdd = function () {
   const div = L.DomUtil.create('div', 'info legend');
   div.innerHTML = `
@@ -144,7 +147,6 @@ legend.onAdd = function () {
   `;
   return div;
 };
-
 legend.addTo(map);
 </script>
 </body>
