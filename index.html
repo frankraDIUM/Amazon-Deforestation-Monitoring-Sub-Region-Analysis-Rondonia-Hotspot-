@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Amazon Deforestation – Rondônia</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+  body { margin:0; }
+  #map { height:100vh; }
+  .info {
+    background:white;
+    padding:8px;
+    border-radius:5px;
+    box-shadow:0 0 10px rgba(0,0,0,.3);
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+// ================== MAP ==================
+const map = L.map('map').setView([-10.5, -62.5], 8);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18
+}).addTo(map);
+
+// ================== IMAGE LAYERS ==================
+const imageBounds = [[-13, -65], [-8, -60]];
+
+const layer2023 = L.imageOverlay('2023_falsecolor.png', imageBounds, {opacity:0.85});
+const layer2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity:0.0});
+
+layer2023.addTo(map);
+
+// ================== EMPTY HOTSPOTS PLACEHOLDER ==================
+const hotspots = L.geoJSON(null, {
+  style: {
+    color: '#ffff00',
+    weight: 1.2,
+    fillOpacity: 0.4
+  },
+  onEachFeature: (f, l) => {
+    const a = Number(f.properties?.area_ha);
+    l.bindPopup(
+      isNaN(a)
+        ? 'Deforestation hotspot'
+        : `Deforestation hotspot<br>${a.toFixed(2)} ha`
+    );
+  }
+});
+
+// ================== LAYER CONTROL (ALWAYS PRESENT) ==================
+const baseLayers = {
+  "2023 False Color": layer2023,
+  "2024 False Color": layer2024
+};
+
+const overlayLayers = {
+  "Deforestation Hotspots": hotspots
+};
+
+const layerControl = L.control.layers(baseLayers, overlayLayers, {
+  collapsed: false
+}).addTo(map);
+
+// ================== LOAD GEOJSON ASYNC ==================
+fetch('https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
+  .then(res => res.json())
+  .then(data => L.geoJSON(data).addTo(map));
+
+// ================== SWITCH YEAR BUTTON ==================
+let currentYear = 2023;
+
+const switchControl = L.control({position:'topleft'});
+switchControl.onAdd = () => {
+  const div = L.DomUtil.create('div','info');
+  div.innerHTML = `<button onclick="switchYear()">Switch Year</button>`;
+  return div;
+};
+switchControl.addTo(map);
+
+window.switchYear = () => {
+  if (currentYear === 2023) {
+    map.removeLayer(layer2023);
+    map.addLayer(layer2024);
+    layerControl._layers.forEach(l => {
+      if (l.name === '2024 False Color') l.layer.addTo(map);
+    });
+    currentYear = 2024;
+  } else {
+    map.removeLayer(layer2024);
+    map.addLayer(layer2023);
+    layerControl._layers.forEach(l => {
+      if (l.name === '2023 False Color') l.layer.addTo(map);
+    });
+    currentYear = 2023;
+  }
+};
+
+// =======================
+// INFO PANEL
+// =======================
+const infoPanel = L.control({ position: 'bottomleft' });
+infoPanel.onAdd = function () {
+  const div = L.DomUtil.create('div', 'info');
+  div.innerHTML = `
+    <h4>Amazon Deforestation Monitoring</h4>
+    <p>
+      Rondônia sub-region<br>
+      Sentinel-2 false color (2023 vs 2024)<br>
+      Hotspots: NDVI drop ≥ 0.20<br>
+      Estimated loss: ~579 km²
+    </p>
+  `;
+  return div;
+};
+infoPanel.addTo(map);
+
+// === Legend control ===
+const legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function () {
+  const div = L.DomUtil.create('div', 'info legend');
+  div.innerHTML = `
+    <h4>Legend</h4>
+    <div>
+      <i style="background:#ffff00"></i> Potential Deforestation Hotspots (2023–2024)<br>
+      <i style="background:#ff3333"></i> High NDVI drop + low 2024 NDVI
+    </div>
+    <div style="margin-top:8px;">
+      <strong>Base Layers:</strong><br>
+      <span style="color:#006400">2023 False Color (NIR-Red-Green)</span><br>
+      <span style="color:#006400">2024 False Color (NIR-Red-Green)</span>
+    </div>
+  `;
+  return div;
+};
+
+legend.addTo(map);
+
+</script>
+</body>
+</html>
