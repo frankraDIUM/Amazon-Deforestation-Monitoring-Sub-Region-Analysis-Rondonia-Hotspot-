@@ -37,16 +37,17 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18
 }).addTo(map);
 
-// ================== IMAGE LAYERS ==================
+// ================== IMAGE OVERLAYS ==================
 const imageBounds = [[-13, -65], [-8, -60]];
 
 const overlay2023 = L.imageOverlay('2023_falsecolor.png', imageBounds, {opacity:0.85});
-const overlay2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity:0.0});
+const overlay2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity:0.85});
 
-overlay2023.addTo(map);
+overlay2023.addTo(map); // start with 2023
+
+let currentYear = '2023';
 
 // ================== HOTSPOTS LAYER ==================
-let currentYear = '2023';
 let hotspots = L.geoJSON(null, {
   style: {
     color: '#ffff00',
@@ -65,11 +66,14 @@ let hotspots = L.geoJSON(null, {
   }
 });
 
+// Add hotspots to map (can toggle visibility later)
+hotspots.addTo(map);
+
 // ================== LOAD GEOJSON ==================
 fetch('https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
   .then(res => res.json())
   .then(data => {
-    hotspots.addData(data).addTo(map);
+    hotspots.addData(data);  // populate the existing layer
   })
   .catch(err => console.error('GeoJSON load failed:', err));
 
@@ -88,7 +92,7 @@ L.control.layers(baseLayers, overlays, {
   collapsed: false
 }).addTo(map);
 
-// ================== SWITCH YEAR CONTROL ==================
+// ================== SWITCH YEAR BUTTON ==================
 const toggleControl = L.control({ position: 'topleft' });
 toggleControl.onAdd = function () {
   const div = L.DomUtil.create('div', 'info');
@@ -146,7 +150,6 @@ legend.onAdd = function () {
   return div;
 };
 legend.addTo(map);
-
 </script>
 </body>
 </html>
