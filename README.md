@@ -6,8 +6,8 @@
 📍 **Focus area**: Southern Rondônia / Northern Mato Grosso / Amazonas
 🛠 **Tech stack**: Google Earth Engine, Sentinel-2 SR, Leaflet.js, GitHub Pages, Git LFS
 🔗 **Live map**:
-👉 [https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)
-[![View](https://img.shields.io/badge/View-Click%20Here-blue)](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)</button>
+👉 [![View](https://img.shields.io/badge/View-Click%20Here-blue)](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)</button>
+Animated change ![Deforestation Animation](animated_change.gif)
 ---
 
 ## 📌 Project Overview
