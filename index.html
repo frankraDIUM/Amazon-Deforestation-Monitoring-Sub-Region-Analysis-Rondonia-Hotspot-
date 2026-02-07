@@ -1,100 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Amazon Deforestation – Rondônia</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<style>
-  body { margin:0; }
-  #map { height:100vh; }
-  .info {
-    background:white;
-    padding:8px;
-    border-radius:5px;
-    box-shadow:0 0 10px rgba(0,0,0,.3);
-    z-index: 1000; /* FIX 1: ensure Switch Year button is visible */
-  }
-  .legend i {
-    display:inline-block;
-    width:12px;
-    height:12px;
-    margin-right:4px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amazon Deforestation – Rondônia (2023 vs 2024)</title>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    body { margin:0; padding:0; font-family: Arial, sans-serif; }
+    #map { height:100vh; }
+    .info {
+      padding: 8px 12px;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      line-height: 1.5;
+    }
+    button {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .legend i {
+      display:inline-block;
+      width:12px;
+      height:12px;
+      margin-right:4px;
+    }
+  </style>
 </head>
 <body>
-
 <div id="map"></div>
 
 <script>
-// ================== MAP ==================
+// =======================
+// MAP SETUP
+// =======================
 const map = L.map('map').setView([-10.5, -62.5], 8);
 
-// Base layer
+// Base OSM tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors',
   maxZoom: 18
 }).addTo(map);
 
-// ================== IMAGE OVERLAYS ==================
+// =======================
+// IMAGE BOUNDS
+// =======================
 const imageBounds = [[-13, -65], [-8, -60]];
 
-const overlay2023 = L.imageOverlay('2023_falsecolor.png', imageBounds, {opacity:0.85});
-const overlay2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity:0.85});
-
+// =======================
+// FALSE COLOR IMAGES (BASE LAYERS)
+// =======================
+const overlay2023 = L.imageOverlay('2023_falsecolor.png', imageBounds, {opacity: 0.85});
+const overlay2024 = L.imageOverlay('2024_falsecolor.png', imageBounds, {opacity: 0.0});
 overlay2023.addTo(map); // start with 2023
+
 let currentYear = '2023';
 
-// ================== HOTSPOTS LAYER ==================
-const hotspots = L.geoJSON(null, {
-  style: {
-    color: '#ffff00',
-    weight: 1.2,
-    fillColor: '#ffff00',
-    fillOpacity: 0.45
-  },
-  onEachFeature: function(feature, layer) {
-    const areaRaw = feature.properties.area_ha;
-    const areaHa = (!isNaN(areaRaw)) ? Number(areaRaw) : null;
-    layer.bindPopup(
-      `<b>Deforestation Hotspot</b><br>
-       Area: ${areaHa ? areaHa.toFixed(2) + ' ha' : 'N/A'}<br>
-       Detected 2023–2024`
-    );
-  }
-});
+// =======================
+// HOTSPOTS GEOJSON (OVERLAY)
+// =======================
+let hotspots;
 
-// ================== LOAD GEOJSON ==================
-fetch('https://media.githubusercontent.com/media/frankradium/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
-  .then(res => res.json())
+fetch('./Loss_Hotspots_Leaflet.geojson')
+  .then(res => {
+    if (!res.ok) throw new Error('Failed to load GeoJSON');
+    return res.json();
+  })
   .then(data => {
-    if (!data || !data.features || data.features.length === 0) {
-      console.error('GeoJSON loaded but contains no features (possible Git LFS issue)');
-      return;
-    }
-    console.log('Hotspots loaded:', data.features.length);
-    hotspots.addData(data); // FIX 2: load data safely, do NOT auto-add to map
+    console.log('GeoJSON loaded:', data.features.length, 'features');
+
+    hotspots = L.geoJSON(data, {
+      style: {
+        color: '#ffff00',
+        weight: 1.2,
+        fillColor: '#ffff00',
+        fillOpacity: 0.45
+      },
+      onEachFeature: function(feature, layer) {
+        const areaRaw = feature.properties.area_ha;
+        const areaHa = (!isNaN(areaRaw)) ? Number(areaRaw) : null;
+        layer.bindPopup(
+          `<b>Deforestation Hotspot</b><br>
+           Area: ${areaHa ? areaHa.toFixed(2) + ' ha' : 'N/A'}<br>
+           Detected 2023–2024`
+        );
+      }
+    });
+
+    // =======================
+    // LAZY-LOAD HOTSPOTS (only when checkbox is ticked)
+    // =======================
+    const overlays = {
+      "Deforestation Hotspots": hotspots
+    };
+
+    overlays["Deforestation Hotspots"].onAdd = function() {
+      hotspots.addTo(map);
+      console.log('Hotspots layer added to map');
+    };
+
+    overlays["Deforestation Hotspots"].onRemove = function() {
+      map.removeLayer(hotspots);
+      console.log('Hotspots layer removed from map');
+    };
+
+    // =======================
+    // LAYER CONTROL
+    // =======================
+    const baseLayers = {
+      "2023 False Color": overlay2023,
+      "2024 False Color": overlay2024
+    };
+
+    L.control.layers(baseLayers, overlays, {
+      position: 'topright',
+      collapsed: false
+    }).addTo(map);
   })
   .catch(err => console.error('GeoJSON load failed:', err));
 
-// ================== LAYER CONTROL ==================
-const overlays = {
-  "Deforestation Hotspots": hotspots
-};
+// =======================
+// SYNC YEAR WHEN RADIO BUTTON CLICKED
+// =======================
+map.on('baselayerchange', function(e) {
+  if (e.name === '2023 False Color') currentYear = '2023';
+  if (e.name === '2024 False Color') currentYear = '2024';
+  console.log('Year changed via control:', currentYear);
+});
 
-const baseLayers = {
-  "2023 False Color": overlay2023,
-  "2024 False Color": overlay2024
-};
-
-L.control.layers(baseLayers, overlays, {
-  position: 'topright',
-  collapsed: false
-}).addTo(map);
-
-// ================== SWITCH YEAR BUTTON ==================
+// =======================
+// SWITCH YEAR BUTTON
+// =======================
 const toggleControl = L.control({ position: 'topleft' });
 toggleControl.onAdd = function () {
   const div = L.DomUtil.create('div', 'info');
@@ -116,7 +155,9 @@ window.toggleYear = function () {
   console.log('Year toggled:', currentYear);
 };
 
-// ================== INFO PANEL ==================
+// =======================
+// INFO PANEL
+// =======================
 const infoPanel = L.control({ position: 'bottomleft' });
 infoPanel.onAdd = function () {
   const div = L.DomUtil.create('div', 'info');
@@ -133,7 +174,9 @@ infoPanel.onAdd = function () {
 };
 infoPanel.addTo(map);
 
-// ================== LEGEND ==================
+// =======================
+// LEGEND
+// =======================
 const legend = L.control({position: 'bottomright'});
 legend.onAdd = function () {
   const div = L.DomUtil.create('div', 'info legend');
@@ -141,12 +184,10 @@ legend.onAdd = function () {
     <h4>Legend</h4>
     <div>
       <i style="background:#ffff00"></i> Potential Deforestation Hotspots (2023–2024)<br>
-      <i style="background:#ff3333"></i> High NDVI drop + low 2024 NDVI
     </div>
     <div style="margin-top:8px;">
       <strong>Base Layers:</strong><br>
-      <span style="color:#006400">2023 False Color (NIR-Red-Green)</span><br>
-      <span style="color:#006400">2024 False Color (NIR-Red-Green)</span>
+      2023 / 2024 False Color (NIR-Red-Green)
     </div>
   `;
   return div;
@@ -155,4 +196,3 @@ legend.addTo(map);
 </script>
 </body>
 </html>
-
