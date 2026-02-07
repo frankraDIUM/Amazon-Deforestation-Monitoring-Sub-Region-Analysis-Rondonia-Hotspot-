@@ -68,9 +68,14 @@ Defined in GEE as:
 ```javascript
 var testAOI = ee.Geometry.Rectangle([-65, -13, -60, -8]);
 ```
-
+<div>
+<img src ="https://github.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/blob/main/Amazon%20Basin.png"/>
+</div>
 ---
-
+<div>
+<img src ="https://github.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/blob/main/Area%20of%20Interest.png"/>
+</div>
+---
 ## 🛰 Data & Preprocessing
 
 **Dataset**
