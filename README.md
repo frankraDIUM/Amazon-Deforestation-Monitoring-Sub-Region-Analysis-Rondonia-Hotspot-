@@ -7,7 +7,7 @@
 🛠 **Tech stack**: Google Earth Engine, Sentinel-2 SR, Leaflet.js, GitHub Pages, Git LFS
 🔗 **Live map**:
 👉 [https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)
-
+[![View](https://img.shields.io/badge/View-Click%20Here-blue)](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)</button>
 ---
 
 ## 📌 Project Overview
@@ -28,7 +28,7 @@ Due to computational and export constraints of the full Amazon basin, the analys
 ## 🎯 Objectives
 
 * Detect potential forest loss between **2023 and 2024**
-* Quantify approximate forest loss area
+* Quantify the approximate forest loss area
 * Visualize results in an interactive web map
 * Publish a reproducible and portfolio-ready workflow
 
@@ -156,7 +156,7 @@ var testAOI = ee.Geometry.Rectangle([-65, -13, -60, -8]);
 * Annual comparison only (no seasonal dynamics)
 * Conservative NDVI thresholds
 * Coarse area estimates
-* Sub-region not representative of entire Amazon
+* Sub-region not representative of the entire Amazon
 * Small patches may be merged or lost during simplification
 
 ---
@@ -182,7 +182,7 @@ var testAOI = ee.Geometry.Rectangle([-65, -13, -60, -8]);
 
 ---
 
-## ✅ Conclusion
+## Conclusion
 
 This project showcases a **scalable, reproducible, and visually intuitive workflow** for monitoring deforestation using open satellite data and modern web mapping tools. It bridges cloud-based geospatial analysis with public-facing visualization and is suitable for **academic, professional, and portfolio applications**.
 
