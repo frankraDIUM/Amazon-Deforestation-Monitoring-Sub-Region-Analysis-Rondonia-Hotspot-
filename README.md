@@ -14,6 +14,8 @@
 ---
 
 Animated Change:
+
+---
 ![Deforestation Animation](animated_change.gif)
 
 ---
