@@ -67,7 +67,7 @@ const hotspots = L.geoJSON(null, {
 });
 
 // ================== LOAD GEOJSON ==================
-fetch('https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
+fetch('https://media.githubusercontent.com/media/frankradium/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/Loss_Hotspots_Leaflet.geojson')
   .then(res => res.json())
   .then(data => {
     if (!data || !data.features || data.features.length === 0) {
@@ -155,3 +155,4 @@ legend.addTo(map);
 </script>
 </body>
 </html>
+
