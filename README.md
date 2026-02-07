@@ -2,10 +2,13 @@
 
 **Monitoring deforestation in the Brazilian Amazon using Sentinel-2 imagery and Google Earth Engine**
 
-📅 **Time period**: 2023 vs 2024
-📍 **Focus area**: Southern Rondônia / Northern Mato Grosso / Amazonas
-🛠 **Tech stack**: Google Earth Engine, Sentinel-2 SR, Leaflet.js, GitHub Pages, Git LFS
-🔗 **Live map**:
+📅 Time period: 2023 vs 2024
+
+📍 Focus area: Southern Rondônia / Northern Mato Grosso / Amazonas
+
+🛠 Tech stack: Google Earth Engine, Sentinel-2 SR, Leaflet.js, GitHub Pages, Git LFS
+
+🔗 Live map:
 👉 [![View](https://img.shields.io/badge/View-Click%20Here-blue)](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)</button>
 ---
 
@@ -15,12 +18,12 @@ Animated change ![Deforestation Animation](animated_change.gif)
 
 ## 📌 Project Overview
 
-This project demonstrates a **complete end-to-end remote sensing workflow** for detecting and visualizing potential deforestation in the Brazilian Amazon.
+This project demonstrates a complete end-to-end remote sensing workflow for detecting and visualizing potential deforestation in the Brazilian Amazon.
 
 It combines:
 
-* Cloud-scale satellite processing in **Google Earth Engine**
-* **NDVI-based change detection**
+* Cloud-scale satellite processing in Google Earth Engine
+* NDVI-based change detection**
 * Vectorization of forest-loss hotspots
 * An **interactive Leaflet web map** for public dissemination
 
@@ -48,7 +51,7 @@ Due to computational and export constraints of the full Amazon basin, the analys
 
 ---
 
-## 🗺 Study Area
+## Study Area
 
 **AOI**: Southern Rondônia, northern Mato Grosso, and Amazonas
 
@@ -131,7 +134,7 @@ var testAOI = ee.Geometry.Rectangle([-65, -13, -60, -8]);
 
 ### Interactive Web Map
 
-🔗 [https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)
+🔗 Click Here [![View](https://img.shields.io/badge/View-Click%20Here-blue)](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)</button>
 
 **Features**
 
@@ -172,17 +175,6 @@ var testAOI = ee.Geometry.Rectangle([-65, -13, -60, -8]);
 * Time slider animation in Leaflet
 * Area-weighted statistics and dashboards
 * Vector tiles (PMTiles) for large-scale performance
-
----
-
-## 🧾 Repository & Links
-
-* **Live map**
-  👉 [https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)
-
-* **Source code & assets**
-  👉 [https://github.com/frankradium/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-](https://github.com/frankradium/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-)
-
 ---
 
 ## Conclusion
