@@ -10,9 +10,11 @@
 
 🔗 Live map:
 👉 [![View](https://img.shields.io/badge/View-Click%20Here-blue)](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)</button>
+
 ---
 
-Animated change ![Deforestation Animation](animated_change.gif)
+Animated Change:
+![Deforestation Animation](animated_change.gif)
 
 ---
 
@@ -179,9 +181,4 @@ var testAOI = ee.Geometry.Rectangle([-65, -13, -60, -8]);
 
 ## Conclusion
 
-This project showcases a **scalable, reproducible, and visually intuitive workflow** for monitoring deforestation using open satellite data and modern web mapping tools. It bridges cloud-based geospatial analysis with public-facing visualization and is suitable for **academic, professional, and portfolio applications**.
-
-
-
-
-Just say the word.
+This project showcases a **scalable, reproducible, and visually intuitive workflow** for monitoring deforestation using open satellite data and modern web mapping tools.
