@@ -83,7 +83,8 @@ Area of Interest:
 <img src ="https://github.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/blob/main/Area%20of%20Interest.png"/>
 </div>
 ---
-## 🛰 Data & Preprocessing
+
+## Data & Preprocessing
 
 **Dataset**
 
