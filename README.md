@@ -16,9 +16,9 @@
 Animated Change:
 
 ---
-<div style="text-align: center;">
-![Deforestation Animation](animated_change.gif)
-</div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/main/animated_change.gif" />
+</p>
 ---
 
 ## 📌 Project Overview
@@ -82,7 +82,7 @@ Area of Interest:
 <p align="center">
 <img src ="https://github.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/blob/main/Area%20of%20Interest.png"/>
 </p>
----
+
 
 ## Data & Preprocessing
 
