@@ -16,9 +16,9 @@
 Animated Change:
 
 ---
-<p align="center">
+<div style="text-align: center;">
 ![Deforestation Animation](animated_change.gif)
-</p>
+</div>
 ---
 
 ## 📌 Project Overview
