@@ -16,9 +16,9 @@
 Animated Change:
 
 ---
-
+<p align="center">
 ![Deforestation Animation](animated_change.gif)
-
+</p>
 ---
 
 ## 📌 Project Overview
@@ -71,17 +71,17 @@ var testAOI = ee.Geometry.Rectangle([-65, -13, -60, -8]);
 ```
 Amazon Basin
 
-<div>
+<p align="center">
 <img src ="https://github.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/blob/main/Amazon%20Basin.png"/>
-</div>
+</p>
 
 ---
 
 Area of Interest: 
 
-<div>
+<p align="center">
 <img src ="https://github.com/frankraDIUM/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/blob/main/Area%20of%20Interest.png"/>
-</div>
+</p>
 ---
 
 ## Data & Preprocessing
