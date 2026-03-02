@@ -41,7 +41,7 @@ Due to computational and export constraints of the full Amazon basin, the analys
 * Detect potential forest loss between **2023 and 2024**
 * Quantify the approximate forest loss area
 * Visualize results in an interactive web map
-* Publish a reproducible and portfolio-ready workflow
+
 
 **Deliverables**
 
