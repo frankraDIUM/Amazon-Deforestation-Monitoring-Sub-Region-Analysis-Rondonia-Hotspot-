@@ -2,11 +2,11 @@
 
 **Monitoring deforestation in the Brazilian Amazon using Sentinel-2 imagery and Google Earth Engine**
 
-📅 Time period: 2023 vs 2024
+ Time period: 2023 vs 2024
 
-📍 Focus area: Southern Rondônia / Northern Mato Grosso / Amazonas
+ Focus area: Southern Rondônia / Northern Mato Grosso / Amazonas
 
-🛠 Tech stack: Google Earth Engine, Sentinel-2 SR, Leaflet.js, GitHub Pages, Git LFS
+ Tech stack: Google Earth Engine, Sentinel-2 SR, Leaflet.js, GitHub Pages, Git LFS
 
 🔗 Live map:
 👉 [![View](https://img.shields.io/badge/View-Click%20Here-blue)](https://frankradium.github.io/Amazon-Deforestation-Monitoring-Sub-Region-Analysis-Rondonia-Hotspot-/)</button>
@@ -21,7 +21,7 @@ Animated Change:
 </p>
 
 
-## 📌 Project Overview
+##  Project Overview
 
 This project demonstrates a complete end-to-end remote sensing workflow for detecting and visualizing potential deforestation in the Brazilian Amazon.
 
@@ -36,7 +36,7 @@ Due to computational and export constraints of the full Amazon basin, the analys
 
 ---
 
-## 🎯 Objectives
+##  Objectives
 
 * Detect potential forest loss between **2023 and 2024**
 * Quantify the approximate forest loss area
@@ -104,7 +104,7 @@ Area of Interest:
 
 ---
 
-## 🔍 Change Detection Method
+##  Change Detection Method
 
 1. Generate max-NDVI mosaics for **2023** and **2024**
 2. Compute NDVI difference:
@@ -122,7 +122,7 @@ Area of Interest:
 
 ---
 
-## 📊 Summary Statistics
+##  Summary Statistics
 
 | Metric                             | Value    |
 | ---------------------------------- | -------- |
@@ -134,7 +134,7 @@ Area of Interest:
 
 ---
 
-## 🧭 Visualization Outputs
+##  Visualization Outputs
 
 ### In Google Earth Engine
 
@@ -162,7 +162,7 @@ Area of Interest:
 
 ---
 
-## ⚙️ Technical Challenges & Solutions
+##  Technical Challenges & Solutions
 
 | Challenge             | Solution                                      |
 | --------------------- | --------------------------------------------- |
@@ -174,7 +174,7 @@ Area of Interest:
 
 ---
 
-## ⚠️ Limitations
+##  Limitations
 
 * Annual comparison only (no seasonal dynamics)
 * Conservative NDVI thresholds
@@ -184,7 +184,7 @@ Area of Interest:
 
 ---
 
-## 🚀 Future Improvements
+##  Future Improvements
 
 * Monthly or seasonal NDVI time series
 * Expanded coverage (Arc of Deforestation)
