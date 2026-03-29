@@ -118,7 +118,7 @@ Area of Interest:
    * 2024 NDVI < **0.55**
 
 **Estimated potential forest loss**
-➡️ **~579 km²** (coarse 100 m estimate)
+-> **~579 km²** (coarse 100 m estimate)
 
 ---
 
